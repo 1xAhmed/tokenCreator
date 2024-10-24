@@ -1,5 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-verify";
 import * as dotenv from "dotenv";
 import "hardhat-deploy";
 dotenv.config();
@@ -19,34 +20,29 @@ const config: HardhatUserConfig = {
           }
         ],
       },
-    networks: {
-        // Ethereum mainnet
-        mainnet: {
-            url: process.env.MAINNET_RPC_URL || "",
-            accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-        },
-        // Goerli testnet
-        sepolia: {
-            url: process.env.SEPOLIA_RPC_URL || "",
-            accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-        },
-    },
-    etherscan: {
+      etherscan: {
         apiKey: {
-            mainnet: process.env.ETHERSCAN_API_KEY,
-            sepolia: process.env.ETHERSCAN_API_KEY,
-            ethernity: ""
+          ernscan: "ethernity_chain", // apiKey is not required, just set a placeholder
         },
-        // customChains: [
-        //     {
-        //         network: "sepolia",
-        //         chainId: 11155111,
-        //         urls: {
-        //             apiURL: "https://api.routescan.io/v2/network/testnet/evm/11155111/etherscan",
-        //             browserURL: "https://11155111.testnet.localhost:8080"
-        //         }
-        //     }
-        // ]
+        customChains: [
+          {
+            network: "ethernity_chain",
+            chainId: 233,
+            urls: {
+              apiURL: "https://api.routescan.io/v2/network/testnet/evm/233/etherscan",
+              browserURL: "https://testnet.ernscan.io"
+            }
+          }
+        ]
+      },
+      networks: {
+        ethernity_chain: {
+          url: 'https://testnet.ethernitychain.io',
+          accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+        },
+      },
+    sourcify: {
+      enabled: true
     },
     namedAccounts: {
         deployer: {
